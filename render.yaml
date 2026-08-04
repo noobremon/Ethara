@@ -2,7 +2,6 @@ services:
   - type: web
     name: ethara-task-manager
     env: node
-    region: singapore
     plan: free
     buildCommand: npm run build
     startCommand: npm run start
@@ -11,9 +10,3 @@ services:
         value: production
       - key: JWT_SECRET
         generateValue: true
-      - key: DB_PATH
-        value: /var/data/task_manager.db
-    disk:
-      name: ethara-sqlite-data
-      mountPath: /var/data
-      sizeGB: 1

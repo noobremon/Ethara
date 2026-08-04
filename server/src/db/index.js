@@ -6,17 +6,34 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const dbDir = path.join(__dirname, '../../data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+const defaultDbDir = path.join(__dirname, '../../data');
+
+function resolveDbPath() {
+  if (process.env.DB_PATH) {
+    try {
+      const targetDir = path.dirname(process.env.DB_PATH);
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+      }
+      return process.env.DB_PATH;
+    } catch (err) {
+      console.warn(`⚠️ Cannot write to DB_PATH (${process.env.DB_PATH}): ${err.message}. Falling back to default project storage.`);
+    }
+  }
+
+  try {
+    if (!fs.existsSync(defaultDbDir)) {
+      fs.mkdirSync(defaultDbDir, { recursive: true });
+    }
+  } catch (e) {
+    console.error('Failed to create default db directory:', e);
+  }
+
+  return path.join(defaultDbDir, 'task_manager.db');
 }
 
-const dbPath = process.env.DB_PATH || path.join(dbDir, 'task_manager.db');
-const dbDirTarget = path.dirname(dbPath);
-if (!fs.existsSync(dbDirTarget)) {
-  fs.mkdirSync(dbDirTarget, { recursive: true });
-}
-
+const dbPath = resolveDbPath();
+console.log('💾 Initializing SQLite Database at:', dbPath);
 const db = new DatabaseSync(dbPath);
 
 // Enable foreign keys
