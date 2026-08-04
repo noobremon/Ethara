@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+client/node_modules
+server/node_modules
+
+# Production Build
+client/dist
+
+# SQLite Data & Local Databases
+server/data/*.db
+server/data/*.db-journal
+
+# Environment Variables
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
