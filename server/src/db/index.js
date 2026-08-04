@@ -11,7 +11,12 @@ if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir, { recursive: true });
 }
 
-const dbPath = path.join(dbDir, 'task_manager.db');
+const dbPath = process.env.DB_PATH || path.join(dbDir, 'task_manager.db');
+const dbDirTarget = path.dirname(dbPath);
+if (!fs.existsSync(dbDirTarget)) {
+  fs.mkdirSync(dbDirTarget, { recursive: true });
+}
+
 const db = new DatabaseSync(dbPath);
 
 // Enable foreign keys

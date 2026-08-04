@@ -73,3 +73,34 @@ A modern, high-performance full-stack Team Task Manager web application built wi
 ### Demo Login Credentials
 - **Admin**: `admin@ethara.com` / `password123`
 - **Member**: `member@ethara.com` / `password123`
+
+---
+
+## 🌐 How to Deploy on Render.com
+
+### Option A: 1-Click Blueprint (Recommended)
+1. Push this project repository to **GitHub** or **GitLab**.
+2. Log into [Render Dashboard](https://dashboard.render.com/).
+3. Click **New +** -> **Blueprint**.
+4. Connect your repository. Render will automatically detect `render.yaml` and configure:
+   - Build Command: `npm run build`
+   - Start Command: `npm run start`
+   - Persistent Disk mounted at `/var/data` for SQLite database.
+5. Click **Apply**.
+
+### Option B: Manual Web Service Setup
+1. Push project to GitHub.
+2. In Render, click **New +** -> **Web Service**.
+3. Connect your repository.
+4. Set configuration:
+   - **Environment**: Node
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm run start`
+5. Add Environment Variables under **Advanced**:
+   - `NODE_ENV`: `production`
+   - `JWT_SECRET`: (Any strong random string e.g. `your_super_secret_jwt_key`)
+   - `DB_PATH`: `/var/data/task_manager.db` (optional if using persistent disk)
+6. Add a **Persistent Disk** (optional for SQLite data persistence across redeploys):
+   - **Mount Path**: `/var/data`
+   - **Size**: 1 GB
+7. Click **Create Web Service**. Render will build the Vite UI and deploy the unified Express REST API & Web App!
